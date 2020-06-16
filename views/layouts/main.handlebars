@@ -13,13 +13,7 @@
             <a href="/" class="btn btn-info">home</a>
         </li>
         <li>
-            <a href="/question/list" class="btn btn-info">question list</a>
-        </li>
-        <li>
             <a href="/question/random" class="btn btn-info">random question</a>
-        </li>
-        <li>
-            <a href="/user/list" class="btn btn-info">users list</a>
         </li>
         <li>
             <a href="/test/list" class="btn btn-info">tests list</a>
@@ -27,9 +21,24 @@
         <li>
             <a href="/link/list" class="btn btn-info">links list</a>
         </li>
+        {{#isAuthenticated req}}
+        <li>
+            <a href="/question/list" class="btn btn-info">question list</a>
+        </li>
         <li>
             <a href="/results/list" class="btn btn-info">results</a>
         </li>
+        <li>
+            <a href="/user/list" class="btn btn-info">users list</a>
+        </li>
+        <li>
+            <a href="/logout" class="btn btn-info">logout</a>
+        </li>
+        {{else}}
+        <li>
+            <a href="/login" class="btn btn-info">login</a>
+        </li>
+        {{/isAuthenticated}}
     </ul>
     <div class="container">
         {{{body}}}

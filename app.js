@@ -12,6 +12,11 @@ const Q = require("./model/Question.js");
 const User = require("./model/User.js");
 const Admin= require("./model/Admin.js");
 const Link = require("./model/Link.js");
+
+const apiPlatforms=require("./controllers/apiPlatforms")
+const apiCopyrights=require("./controllers/apiCopyrights")
+const results=require("./controllers/results")
+
 var exphbs = require('express-handlebars');
 const paginator = require("./service/paginator");
 const Test = require("./model/Test.js")
@@ -44,6 +49,13 @@ app.engine('handlebars', exphbs({
           return options.inverse(this);
       }
     },
+    isAuthenticated: function(req, options) {
+      if (req.isAuthed) {
+        return options.fn(this);
+      } else {
+        return options.inverse(this);
+      }
+    }
   }
 }));
 app.set('view engine', 'handlebars');
@@ -55,6 +67,20 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(bodyParser.json())
 app.use(cookieParser());
+app.use(function(req,res,next){
+  res.locals.req = req;
+  next();
+})
+const isAuth = (req,res, next) => {
+  let token=req.cookies.token
+  jwt.verify(token, req.app.get("secretKey"), function (err, decoded) {
+    if(!err) {
+      req.isAuthed = !!decoded.id;
+    }
+    next();
+  });
+}
+app.use(isAuth)
 const validateUser=(req,res,next)=>{
   let token=req.cookies.token
   jwt.verify(token, req.app.get("secretKey"), function (err, decoded) {
@@ -71,30 +97,67 @@ const validateUser=(req,res,next)=>{
     }
   });
 }
+
+/** Static Pages */
 app.get('/', (req, res) => {
   res.render('home');
 });
-app.get('/api/platforms', async (req, res) => {
-  const platforms = await Link.menu("platform");
-  res.json(platforms);
-});
-app.get('/api/platforms/:copyright', async (req, res) => {
-  const platforms = await Link.menu("platform", {
-    copyright: req.params.copyright
-  });
-  res.json(platforms);
-});
-app.get('/api/copyrights', async (req, res) => {
-  const copyrights = await Link.menu("copyright")
-  res.json(copyrights);
-});
-app.get('/api/copyrights/:platform', async (req, res) => {
-  const copyrights = await Link.menu("copyright", {
-    platform: req.params.platform
-  });
-  res.json(copyrights);
-});
 
+app.get('/login', (req, res) => {
+  res.render('login')
+})
+
+app.post('/login', (req, res) => {
+  const admin=Admin.findOne({name:req.body.name})
+  if (!admin) {
+    res.json({
+      status: "error",
+      message: "Invalid email/password!!!",
+      data: null,
+    });
+    return;
+  }
+  if (!bcrypt.compareSync(req.body.password, admin.password)) {
+    res.json({
+      status: "error",
+      message: "Invalid email/password!!!",
+      data: null,
+    });
+    return;
+  }
+
+  const token = jwt.sign({ id: admin._id }, req.app.get("secretKey"), {
+    expiresIn: "8h",
+  });
+
+  res.cookie("token", token, {
+    expires: new Date(Date.now() + 8 * 3600000),
+    httpOnly: true,
+  });
+
+  res.redirect(302, "/");
+ // res.render('login')
+})
+app.get('/logout', (req, res) => {
+  res.cookie("token","",{
+    expires:new Date(Date.now()-24*3600000),
+    httpOnly: true,
+  })
+  res.redirect(302, "/login");
+})
+
+/** API routes */
+/** API platform routes */
+app.get('/api/platforms',apiPlatforms.list);
+app.get('/api/platforms/:copyright', apiPlatforms.listByCopyright );
+
+/** API copyright routes */
+app.get('/api/copyrights', apiCopyrights.list);
+app.get('/api/copyrights/:platform',apiCopyrights.listByPlatform );
+
+
+/** Dynamic pages */
+/** Questions */
 app.get('/question/list', validateUser,async (req, res) => {
   const questions = await Q.list();
   res.render('questions', { questions });
@@ -107,6 +170,8 @@ app.get('/question/:id', async (req, res) => {
   const question = await Q.getById(req.params.id)
   res.render('question', { question });
 });
+
+/** Users */
 app.get('/user/list', async (req, res) => {
   const users = await User.list();
   res.render('users', { users });
@@ -115,6 +180,8 @@ app.get('/user/:id', async (req, res) => {
   const user = await User.getById(req.params.id)
   res.render('user', { user });
 });
+
+/** Links */
 app.get('/link/list', async (req, res) => {
   const criteria = {};
   const { platform, copyright, page = 1 } = req.query
@@ -149,50 +216,13 @@ app.get('/link/:id', async (req, res) => {
   const link = await Link.getById(req.params.id)
   res.render('link', { link });
 });
+
+/** Tests */
 app.get('/test/list', async (req, res) => {
   const tests = await Test.list();
   res.render('tests', { tests });
 });
-app.get('/results/list', async (req, res) => {
-  const results = await Res.list();
-  res.render('results', { results });
-})
-app.get('/results/:id', async (req, res) => {
-  const resultModel = await Res.getById(req.params.id);
-  const test = await Test.getById(resultModel.test_id);
-  const questions = await Q.list({
-    _id: {
-      $in: test.questions
-    }
-  });
-  const answers = resultModel.answers;
-  const questionsInfo = []
-  let correctAnswers = 0;
-  for (let i = 0; i < questions.length; i++) {
-    let questionInfo = {
-      num: 'Вопрос ' + (i + 1),
-      text: questions[i].text,
-      options: questions[i].options.map((option, optionIndex) => {
-        return {
-          correct_answer: questions[i].answer == optionIndex,
-          user_answer: answers[i] == optionIndex,
-          text: option.text
-        };
-      })
-    }
-    questionsInfo.push(questionInfo);
-    if (questions[i].answer == answers[i]) {
-      correctAnswers += 1;
-    }
-  }
 
-  const result = Math.round(correctAnswers * 100 / questions.length)
-  res.render('result', {
-    questionsInfo,
-    result,
-    successFlag: result >= test.success
-  })
-})
 app.get('/test/:id/result', async (req, res) => {
   const answers = JSON.parse(req.query.answers);
   const test = await Test.getById(req.params.id);
@@ -214,44 +244,10 @@ app.get('/test/:id', async (req, res) => {
 
   res.render('test', { test, questions, count: questions.length });
 });
-app.get('/login', (req, res) => {
-  res.render('login')
-})
-app.post('/login', (req, res) => {
-  const admin=Admin.findOne({name:req.body.name})
-  if (!admin) {
-    res.json({
-      status: "error",
-      message: "Invalid email/password!!!",
-      data: null,
-    });
-    return;
-  }
-  if (!bcrypt.compareSync(req.body.password, admin.password)) {
-    res.json({
-      status: "error",
-      message: "Invalid email/password!!!",
-      data: null,
-    });
-    return;
-  }
 
-  const token = jwt.sign({ id: admin._id }, req.app.get("secretKey"), {
-    expiresIn: "8h",
-  });
+/** Results */
+app.get('/results/list', validateUser, results.list)
+app.get('/results/:id', validateUser, results.getById)
 
-  res.cookie("token", token, {
-    expires: new Date(Date.now() + 8 * 3600000),
-    httpOnly: true,
-  });
-
-  res.redirect(302, "/");
- // res.render('login')
-})
 app.use(express.static("public"));
-
-
-
-
-
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
