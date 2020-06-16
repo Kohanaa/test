@@ -1,0 +1,51 @@
+<h2>Проверка знаний</h2>
+<h3>результаты</h3>
+<div class="alert alert-{{#if successFlag}}success{{else}}danger{{/if}}">
+    правильных оветов: {{result}} %
+</div>
+{{#each questionsInfo}}
+<div>
+    <h4>{{num}}</h4>
+    <p>{{text}}</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    ответ
+                </th>
+                <th class="sm-th">
+                    выбрано
+                </th>
+                <th class="sm-th">
+                    правильно
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each options}}
+                <tr>
+                <td>
+                    {{text}}
+                </td>
+                <td>
+                    {{#if user_answer}}
+                       {{#if correct_answer}}
+                             <i class="fas fa-check fa-3x text-success"></i>
+                             {{else}}
+                             <i class="fas fa-times fa-3x text-danger"></i>
+                       {{/if}}
+                    {{/if}}
+                    
+                </td>
+                <td>
+                    {{#if correct_answer}}
+                       <i class="fas fa-check fa-3x text-success"></i>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{/each}}
+

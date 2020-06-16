@@ -1,3 +1,10 @@
-<p>
-    {{question.text}}
-</p>
+<div class="block">
+    <h1>Вопрос</h1>
+    <p>{{question.text}}</p>
+    <div class="options" data-answer="{{question.answer}}">
+    {{#each question.options}}
+        <div class="option" data-id="{{@index}}">{{text}}</div>
+    {{/each}}
+    </div>
+    <a href="/question/random" class="next">следующий вопрос</a>
+</div>

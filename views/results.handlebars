@@ -1,0 +1,19 @@
+<table class="table table-stripped">
+    <thead>
+        <tr>
+            <td>user id</td>
+            <td>test id</td>
+            <td>created at</td>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each results}}
+        <tr>
+            <td>{{user_id}}</td>
+            <td><a href="/test/{{test_id}}">{{test_id}}</a></td>
+            <td><a href="/results/{{_id}}">{{created_at}}</a></td>
+            
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

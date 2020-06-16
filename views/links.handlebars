@@ -1,0 +1,38 @@
+<form action="" id="connected">
+    <select name="platform" id="platform">
+        <option value="">выбор платформы</option>
+         {{#each platforms}}
+        <option value="{{this}}" {{#ifCond ../platform '==' this}} selected {{/ifCond}}>{{this}}</option>
+        {{/each}}
+    </select>
+    <select name="copyright" id="copyright">
+        <option value="">выбор</option>
+       {{#each copyrights}}
+        <option value="{{this}}" {{#ifCond ../copyright '==' this}} selected {{/ifCond}}>{{this}}</option>
+        {{/each}}
+    </select>
+    {{!-- <input type="submit" value="поиск"> --}}
+</form>
+{{> paginator}}
+<table class="table table-stripped">
+    <thead>
+        <tr>
+            <td>title</td>
+            <td>platform</td>
+            <td>copyright</td>
+            <td>link</td>
+            <td>weeks</td>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each links}}
+        <tr>
+            <td><a href="/link/{{_id}}" >{{title}}</a></td>
+            <td><a href="/link/list?platform={{platform}}">{{platform}}</a></td>
+            <td><a href="/link/list?copyright={{copyright}}">{{copyright}}</a></td>
+            <td><a href="{{link}}" target="_blank"><i class="fas fa-external-link-alt"></i></a></td>
+            <td>{{weeks}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -1,51 +1,38 @@
-const questions = [{
-    id: 1,
-    text: 'вопрос 1',
-    options: [{
-        text: "1"
-    },
-    { text: "2" },
-    { text: "3" },
-    {
-        text: "4"
-    }],
-    anwser: 3
-},
-{
-    id: 2,
-    text: 'вопрос 2',
-    options: [{
-        text: "2"
-    },
-    { text: "2" },
-    { text: "3" },
-    {
-        text: "4"
-    }],
-    anwser: 1
-},
-{
-    id: 3,
-    text: 'вопрос 3',
-    options: [{
-        text: "3"
-    },
-    { text: "2" },
-    { text: "3" },
-    {
-        text: "4"
-    }],
-    anwser: 1
-}];
-
-exports.list=()=>{
-    return questions
+const mongoose = require("mongoose");
+const optionSchema = new mongoose.Schema({
+    text: 'string',
+});
+const schema = new mongoose.Schema({
+    text: 'string',
+    options:[optionSchema],
+    anwser:'number',
+    vertical:"number"
+});
+const model = mongoose.model('questions', schema);
+const getById=async (id) => {
+    return await model.findOne({ _id: id })
+        .exec()
+        .then(item => {
+            return item ?item.toObject() : item;
+        });
 }
-exports.getById=(id)=>{
-    return questions.find((item)=>{
-        return item.id==id
-    })
+exports.getRandom = async () => {
+    const ids= await model.find().distinct("_id").exec().then(items => {
+        return items
+    });
+    const id= ids[Math.floor(Math.random() * Math.floor(ids.length))];
+    return await getById(id);
 }
-exports.getRandom=()=>{
-    return questions[Math.floor(Math.random() * Math.floor(questions.length))];
+exports.getById = getById;
+exports.list = async (condition, limit) => {
+    if (!condition) {
+        condition = {}
+    }
+    const resLimit = limit || 50;
+    return await model.find(condition)
+        .limit(resLimit)
+        .exec()
+        .then(items => {
+            return items.map(item=>item.toObject());
+        });
 }

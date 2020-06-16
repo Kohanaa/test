@@ -1,0 +1,3 @@
+{"text":"Какая функция позволяет очищать конечную анимацию?","options":[{"text":"setInterval"},{"text":"setTimeout"},{"text":"clearTimeout"},{"text":"clear"}],"answer":2}
+{"text":"Какой оператор служит для создания нового экземпляра из класса однотипных объектов?","options":[{"text":"prototype"},{"text":"this"},{"text":"new"},{"text":"create"}],"answer":2}
+{"text":"Какой метод позволяет изменять порядок элементов массива на противоположный?","options":[{"text":"reverse()"},{"text":"join()"},{"text":"sort()"},{"text":"unsort()"}],"answer":0}

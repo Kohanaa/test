@@ -3,20 +3,38 @@
 <head>
     <meta charset="utf-8">
     <title>Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <ul>
+    <ul class="menu" align="center">
         <li>
-            <a href="/">home</a>
+            <a href="/" class="btn btn-info">home</a>
         </li>
         <li>
-            <a href="/question/list">question list</a>
+            <a href="/question/list" class="btn btn-info">question list</a>
         </li>
         <li>
-            <a href="/question/random">random question</a>
+            <a href="/question/random" class="btn btn-info">random question</a>
+        </li>
+        <li>
+            <a href="/user/list" class="btn btn-info">users list</a>
+        </li>
+        <li>
+            <a href="/test/list" class="btn btn-info">tests list</a>
+        </li>
+        <li>
+            <a href="/link/list" class="btn btn-info">links list</a>
+        </li>
+        <li>
+            <a href="/results/list" class="btn btn-info">results</a>
         </li>
     </ul>
-    {{{body}}}
- 
+    <div class="container">
+        {{{body}}}
+    </div>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+   <script src="/js/script.js"></script> 
 </body>
 </html>

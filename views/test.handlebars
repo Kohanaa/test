@@ -1,0 +1,19 @@
+<h4>{{test.name}}</h4>
+<div class="message alert"></div>
+
+<div id="data-test" data-success="{{test.success}}" data-count="{{count}}" data-id="{{test._id}}"></div>
+{{#each questions}}
+<div class="block{{#if vertical}} vertical{{/if}}">
+    <h1>Вопрос {{@index}}</h1>
+    <p>{{text}}</p>
+    <div class="options" data-answer="{{answer}}" data-question-id={{@index}}>
+    {{#each options}}
+        <div class="option" data-id="{{@index}}">{{text}}</div>
+    {{/each}}
+    </div>
+</div>
+{{/each}}
+<div id="btn-view-more">
+    <a href="#" class="btn btn-danger">подробнее</a>
+</div>
+<div class="message alert"></div>

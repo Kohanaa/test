@@ -1,0 +1,118 @@
+.menu li {
+  display: inline-block;
+}
+
+#connected {
+  margin-bottom: 12px;
+}
+
+#connected select {
+  width: 300px;
+}
+
+.block {
+  width: 650px;
+  height: 400px;
+  background: #FFFFFF;
+  -webkit-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  margin: 36px auto;
+  padding-top: 12px;
+}
+
+.block.vertical {
+  height: auto;
+}
+
+.block.vertical .options .option {
+  width: 440px;
+}
+
+.block h1 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #000000;
+}
+
+.block p {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  margin-top: 36px;
+  color: #726464;
+}
+
+.block .next {
+  text-align: center;
+  display: none;
+}
+
+.block .next.active {
+  display: block;
+}
+
+.block .options {
+  margin: 36px auto;
+  width: 440px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 0;
+}
+
+.block .options .option {
+  background: #FFFFFF;
+  -webkit-box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  width: 200px;
+  height: 80px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  color: #000000;
+  text-align: center;
+  padding-top: 24px;
+  margin-bottom: 36px;
+  cursor: pointer;
+}
+
+.block .options .option.active {
+  background: #D7CFCF;
+  border: 5px solid #666F8F;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+          box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+  padding-top: 19px;
+}
+
+.block .options .option.active.correct {
+  background-color: #33F122;
+}
+
+.block .options .option.active.incorrect {
+  background-color: #EA0404;
+}
+
+#btn-view-more {
+  text-align: center;
+  display: none;
+}
+
+.sm-th {
+  width: 60px;
+}
+/*# sourceMappingURL=style.css.map */

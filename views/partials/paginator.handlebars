@@ -1,0 +1,12 @@
+{{#if pageItems}}
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {{#each pageItems}}
+    <li class="page-item {{#if active}}active{{/if}}">
+        <a href="{{link}}" class="page-link">{{text}}</a>
+    </li>
+    {{/each}}
+  </ul>
+</nav>
+{{/if}}
+
