@@ -40,7 +40,9 @@ app.use(isAuth)
 app.get('/', statics.homePage);
 app.get('/login', statics.loginPage);
 app.post('/login', statics.login)
-app.get('/logout', statics.logout)
+app.get('/signup',statics.signupPage);
+app.post('/signup', statics.signup);
+app.get('/logout', validateUser, statics.logout)
 
 /** API routes */
 /** API platform routes */
@@ -55,11 +57,11 @@ app.get('/api/copyrights/:platform', apiCopyrights.listByPlatform);
 /** Questions */
 app.get('/question/list', validateUser, questionsController.listPage);
 app.get('/question/random', questionsController.randomPage);
-app.get('/question/:id', questionsController.viewPage);
+app.get('/question/:id', validateUser, questionsController.viewPage);
 
 /** Users */
-app.get('/user/list', usersController.listPage);
-app.get('/user/:id', usersController.viewPage);
+app.get('/user/list',validateUser, usersController.listPage);
+app.get('/user/:id', validateUser, usersController.viewPage);
 
 /** Links */
 app.get('/link/list', linksController.listPage);
@@ -67,11 +69,12 @@ app.get('/link/:id', linksController.viewPage);
 
 /** Tests */
 app.get('/test/list', testsController.listPage);
-app.get('/test/:id/result', testsController.resultPage)
-app.get('/test/:id', testsController.viewPage);
+app.get('/test/:id/result', validateUser, testsController.resultPage)
+app.get('/test/:id', validateUser, testsController.viewPage);
 
 /** Results */
 app.get('/results/list', validateUser, results.list)
+app.get('/results/my', validateUser, results.myPage)
 app.get('/results/:id', validateUser, results.getById)
 
 app.use(express.static("public"));

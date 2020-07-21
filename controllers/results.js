@@ -42,3 +42,9 @@ exports.getById=async (req, res) => {
       successFlag: result >= test.success
     })
   }
+  exports.myPage=async (req,res) =>{
+    const results = await Res.list({
+      user_id: req.userId 
+    });
+    res.render('results', { results });
+  }

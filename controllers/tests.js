@@ -11,12 +11,11 @@ const resultPage = async (req, res) => {
     const answers = JSON.parse(req.query.answers);
     const test = await Test.getById(req.params.id);
     const resultModel = await Res.create({
-        user_id: "1",
+        user_id: req.userId,
         answers: answers,
         test_id: test._id,
     })
     res.redirect('/results/' + resultModel._id, 302)
-
 }
 
 const viewPage = async (req, res) => {

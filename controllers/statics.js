@@ -1,15 +1,17 @@
 const Admin= require("../model/Admin.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User=require("../model/User.js");
 const homePage = (req, res) => {
     res.render('home');
 }
 const loginPage = (req, res) => {
     res.render('login')
 }
-const login = (req, res) => {
+const login = async (req, res) => {
     const admin = Admin.findOne({ name: req.body.name })
-    if (!admin) {
+    const user = await User.findOne({name:req.body.name})
+    if (!admin && !user) {
         res.json({
             status: "error",
             message: "Invalid email/password!!!",
@@ -17,7 +19,7 @@ const login = (req, res) => {
         });
         return;
     }
-    if (!bcrypt.compareSync(req.body.password, admin.password)) {
+    if (!bcrypt.compareSync(req.body.password, admin ? admin.password : user.password)) {
         res.json({
             status: "error",
             message: "Invalid email/password!!!",
@@ -26,7 +28,7 @@ const login = (req, res) => {
         return;
     }
 
-    const token = jwt.sign({ id: admin._id }, req.app.get("secretKey"), {
+    const token = jwt.sign({ id: admin ? admin._id : user._id }, req.app.get("secretKey"), {
         expiresIn: "8h",
     });
 
@@ -37,6 +39,31 @@ const login = (req, res) => {
 
     res.redirect(302, "/");
     // res.render('login')
+}
+const signupPage=(req,res)=>{
+    res.render('signup')
+}
+const signup=async(req,res)=>{
+    // получить параметры (name, password)
+    const name=req.body.name
+    const password=req.body.password
+
+    // найти в БД пользователя с таким именем
+    // если уже есть, то вернуть ошибку
+    const user = await User.findOne({ name: req.body.name })
+    if (user){
+        res.json({
+            error:"this user exists"
+        })
+        return
+    }
+    
+    // создание нового пользователя. При этом нужно сгенерировать пароль
+    // (перед этим нужно добавить поле password в модель)
+    const newUser=await User.create({name,password})
+
+    // отправить пользователя на страницу входа
+    res.redirect(302, "/login");
 }
 const logout = (req, res) => {
     res.cookie("token", "", {
@@ -50,5 +77,7 @@ module.exports = {
     homePage,
     loginPage,
     login,
-    logout
+    logout,
+    signupPage,
+    signup
 }
