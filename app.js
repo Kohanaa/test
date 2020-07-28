@@ -20,6 +20,7 @@ const questionsController = require("./controllers/questions")
 const testsController = require("./controllers/tests")
 const usersController = require("./controllers/users");
 const linksController = require("./controllers/links")
+const errorsController = require("./controllers/errors")
 
 var exphbs = require('express-handlebars');
 app.set("secretKey", process.env.JWT_SECRET);
@@ -76,6 +77,10 @@ app.get('/test/:id', validateUser, testsController.viewPage);
 app.get('/results/list', validateUser, results.list)
 app.get('/results/my', validateUser, results.myPage)
 app.get('/results/:id', validateUser, results.getById)
+
+/** Errors */
+app.get('/errors/my', validateUser, errorsController.my)
+
 
 app.use(express.static("public"));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

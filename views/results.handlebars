@@ -18,3 +18,9 @@
         {{/each}}
     </tbody>
 </table>
+
+{{#if linksFlag}}
+{{#each links}}
+<a href="{{url}}">{{title}}</a>
+{{/each}}
+{{/if}}

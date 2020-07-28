@@ -45,8 +45,16 @@ exports.getById=async (req, res) => {
     })
   }
   exports.myPage=async (req,res) =>{
+    const links=[{
+      title:"ошибки",
+      url:"/errors/my"
+    }];
     const results = await Res.list({
       user_id: req.userId 
     });
-    res.render('results', { results });
+    res.render('results', {
+      results,
+      links,
+      linksFlag: true,
+    });
   }
