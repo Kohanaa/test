@@ -24,3 +24,7 @@ exports.list = async (condition, limit) => {
             return items.map(item=>item.toObject());
         });
 }
+exports.store=async(fields)=>{
+    const test=new model(fields)
+    return await test.save()
+}

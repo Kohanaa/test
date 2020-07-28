@@ -6,7 +6,9 @@ const schema = new mongoose.Schema({
     text: 'string',
     options:[optionSchema],
     anwser:'number',
-    vertical:"number"
+    vertical:"number",
+    code:"string",
+    explanation:"string"
 });
 const model = mongoose.model('questions', schema);
 const getById=async (id) => {

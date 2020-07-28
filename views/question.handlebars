@@ -1,6 +1,7 @@
 <div class="block">
     <h1>Вопрос</h1>
     <p>{{question.text}}</p>
+    <pre>{{question.code}}</pre>
     <div class="options" data-answer="{{question.answer}}">
     {{#each question.options}}
         <div class="option" data-id="{{@index}}">{{text}}</div>

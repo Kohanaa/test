@@ -21,6 +21,8 @@ exports.getById=async (req, res) => {
       let questionInfo = {
         num: 'Вопрос ' + (i + 1),
         text: questions[i].text,
+        explanation:questions[i].explanation,
+        isWrong:questions[i].answer != answers[i],
         options: questions[i].options.map((option, optionIndex) => {
           return {
             correct_answer: questions[i].answer == optionIndex,

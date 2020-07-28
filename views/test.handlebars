@@ -6,6 +6,7 @@
 <div class="block{{#if vertical}} vertical{{/if}}">
     <h1>Вопрос {{@index}}</h1>
     <p>{{text}}</p>
+    <pre>{{code}}</pre>
     <div class="options" data-answer="{{answer}}" data-question-id={{@index}}>
     {{#each options}}
         <div class="option" data-id="{{@index}}">{{text}}</div>
