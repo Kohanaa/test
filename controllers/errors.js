@@ -28,17 +28,20 @@ exports.my = async (req,res)=> {
                     // верный ответ
                     correct_answer:question.options[question.answer].text,
                     // ответ, который дал пользователь
-                    user_anwser:question.options[answers[i]].text,
+                    user_answer:question.options[answers[i]].text,
                     // объяснение
-                    explanation:question.explanation,                   
+                    explanation:question.explanation,
+                    // id результата теста, в котором была ошибка
+                    result_id: resultModel._id,
+                    question_id:question._id
                 })
             }
         }
     }
 
-    res.send('<pre>' + JSON.stringify({
-        errorsCount:errorQuestions.length,
-        errorQuestions,
-    }, null, 2) + '</pre>')
+    res.render('errors/my', {
+        errorsCount: errorQuestions.length,
+        errorQuestions
+    });
 }
 

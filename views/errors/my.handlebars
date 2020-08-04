@@ -1,0 +1,30 @@
+<table class="table-striped table">
+    <thead>
+        <tr>
+            <th>Текст вопроса</th>
+            <th>Ответ</th>
+            <th>Третий заголовок</th>
+            <th>Результат</th>
+        </tr>
+    </thead>
+    <tbody>
+       {{#each errorQuestions}} 
+        <tr>
+            <td>
+                {{text}}
+               <pre>{{code}}</pre> 
+            </td>
+            <td>
+               <p class="text-danger">{{user_answer}}</p> 
+               <p class="text-success">{{correct_answer}}</p> 
+            </td>
+            <td>
+                {{explanation}}
+            </td>
+            <td>
+                <a href="/results/{{result_id}}#question_{{question_id}}">ссылка на результат теста</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -19,6 +19,7 @@ exports.getById=async (req, res) => {
     let correctAnswers = 0;
     for (let i = 0; i < questions.length; i++) {
       let questionInfo = {
+        _id:questions[i]._id,
         num: 'Вопрос ' + (i + 1),
         text: questions[i].text,
         explanation:questions[i].explanation,
