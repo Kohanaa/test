@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "bot": "nodemon bot.js"
   },
   "repository": {
     "type": "git",
@@ -26,9 +27,10 @@
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.5"
+    "mongoose": "^5.9.5",
+    "node-telegram-bot-api": "^0.50.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.4"
   }
 }
