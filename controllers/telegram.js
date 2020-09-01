@@ -28,7 +28,46 @@ const test = async (bot, msg)=>{
         }
     } );
 }
+const stats= async (bot,msg)=>{
+    const chatId = msg.chat.id;
+    const user_id= msg.from.id;
+    let resultAnswer = await ResultAnswer.getByUserId(user_id);
+    console.log(resultAnswer)
+    if (!resultAnswer){
+        bot.sendMessage(chatId,'статистика отсутствует')
+        return 
+    }
+    let correctCount=0;
+    let wrongCount=0;
+    for(let answer of resultAnswer.answers){
+        if(answer.is_correct){
+            correctCount+=1
+        }
+        else{
+            wrongCount+=1;
+        }
+    }
+    bot.sendMessage(chatId,`статистика
+        верных ответов: ${correctCount}
+        неверных ответов: ${wrongCount}
+    `)
+}
+const next= async(bot,msg)=>{
+    const chatId=msg.chat.id;
+    const user_id= msg.from.id;
+    const questions = await Question.list({},5)
+    let resultAnswer = await ResultAnswer.getByUserId(user_id);
+    const existIds= resultAnswer.answers.map(answer=>answer.question_id)
+    console.log(existIds)
+    for(let question of questions){
+        if(existIds.indexOf(question._id)===-1){
+            sendQuestion(question,bot,chatId)
+            return
+        }
+    }
+    bot.sendMessage(chatId,"вопросов на сегодня нет")
 
+}
 const testChoice = async (bot, chat_id, user_id, id) => {
     const test=await Test.getById(id)
     const buttons = [];
@@ -46,8 +85,7 @@ const testChoice = async (bot, chat_id, user_id, id) => {
         }
     } );
 }
-const questionChoice = async(bot, chat_id, user_id, id)=>{
-    const question=await Question.getById(id)
+const sendQuestion=async(question,bot,chat_id)=>{
     const buttons=[];
     for(let i=0;i<question.options.length;i++){
         buttons.push({
@@ -62,6 +100,10 @@ ${question.code || ''}`,{
             inline_keyboard: reformattedButtons
         }
     })
+}
+const questionChoice = async(bot, chat_id, user_id, id)=>{
+    const question=await Question.getById(id)
+    sendQuestion(question,bot,chat_id)
 }
 const optionChoice= async(bot, chat_id, user_id, id,option_index)=>{
     const question = await Question.getById(id)
@@ -92,5 +134,6 @@ module.exports={
     testChoice,
     questionChoice,
     optionChoice,
-
+    stats,
+    next,
 }

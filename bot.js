@@ -7,7 +7,12 @@ const bot = new TelegramBot(token, {polling: true});
 bot.onText(/\/test/, async (msg) => {
   telegramController.test(bot,msg)
 });
-
+bot.onText(/\/stats/, async (msg) => {
+  telegramController.stats(bot,msg)
+});
+bot.onText(/\/next/, async (msg) => {
+  telegramController.next(bot,msg)
+});
 bot.on("callback_query", async (ctx) => {
   console.log(ctx);
   const {

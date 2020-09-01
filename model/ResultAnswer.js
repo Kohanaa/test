@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
     user_id:String,
 });
 
-const model = mongoose.model('ResultQuestion', schema);
+const model = mongoose.model('ResultAnswer', schema);
 
 exports.getByUserId=async(user_id) => {
   return await model.findOne({user_id})
